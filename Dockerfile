@@ -1,6 +1,6 @@
 ARG DEBIAN_VERSION=buster-slim
 
-FROM elixir:1.13 as builder
+FROM elixir:1.11.4 as builder
 
 USER root
 ENV MIX_ENV=prod
@@ -19,7 +19,7 @@ RUN mix do deps.get, deps.compile
 
 COPY . .
 
-RUN mix escript.build --overwrite
+RUN mix release
 
 FROM debian:${DEBIAN_VERSION}
 
@@ -31,7 +31,9 @@ RUN apt-get update -qq && apt-get install -y \
   openssl && \
   rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /opt/app/ledboard_tester ./
+COPY --from=builder /opt/app/_build/prod/rel/ledboard_tester ./
 
-ENTRYPOINT ["/opt/app/ledboard_tester"]
-CMD ["--ip=1", "--port=2"]
+ENV ip 1
+ENV port 2
+
+CMD ["bin/ledboard_tester", "eval", "\"LedboardTester.call(\\\"$ip\\\", $port)\""]

@@ -5,7 +5,7 @@ defmodule LedboardTester.MixProject do
     [
       app: :ledboard_tester,
       version: "0.1.0",
-      elixir: "~> 1.13",
+      elixir: "~> 1.11.4",
       start_permanent: Mix.env() == :prod,
       escript: [main_module: LedboardTester],
       deps: deps()
