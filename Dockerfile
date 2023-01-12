@@ -33,7 +33,7 @@ RUN apt-get update -qq && apt-get install -y \
 
 COPY --from=builder /opt/app/_build/prod/rel/ledboard_tester ./
 
-ENV ip 1
-ENV port 2
+ENV HOST 127.0.0.1
+ENV PORT 12345
 
-CMD ["bin/ledboard_tester", "eval", "\"LedboardTester.call(\\\"$ip\\\", $port)\""]
+CMD bin/ledboard_tester eval "LedboardTester.main()"
